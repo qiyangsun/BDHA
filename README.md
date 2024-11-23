@@ -1,7 +1,7 @@
 # BDHA
 Final project repo for CSE6250
 
-# data preprocessing
+# Data Processing
 -	creat analytical ready dataset
 		Rscript data_processing.r
 
