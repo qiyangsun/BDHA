@@ -6,14 +6,15 @@
 library(dplyr)
 library(data.table)
 library(purrr)
+library(MatchIt)
 
 p_data <- "../data"
 p_data_mimic_iv <- "../data/mimic_iv"
 
 
-################################################################################
+#####----------------------------------------------------------------------#####
 ##### Process mimic IV data
-################################################################################
+#####----------------------------------------------------------------------#####
 
 ### Load Data
 # Vital information
@@ -90,20 +91,27 @@ summary(match_out)
 
 # Create a matched dataset
 matched_data <- match.data(match_out)
-table(matched_data$race_r)
+table(matched_data$sepsis)
 glimpse(matched_data)
 
 
-
 ### Data correction steps, remove outliers (using winsorize way)
+list_sepsis_id <- unique((df_patients_sepsis%>%filter(sepsis == 1)%>%select(unique_id))$unique_id)
+
+
+# Harmonize temerature units from C to F
+# Also deal with temperature miss decimal points. e.g. recode 984 to 98.4
 df_vital_need <- df_vital%>%
-  filter(unique_id%in%matched_data$unique_id)
+  filter(unique_id%in%matched_data$unique_id)%>%
+  mutate(sepsis = ifelse(unique_id%in%list_sepsis_id, 1, 0),
+         temperature = ifelse(temperature < 43, ((temperature * 9/5) + 32), temperature),
+         temperature = ifelse(temperature > 900, temperature/10, temperature))
+
   
 # Summary stats
 fn_stats <- function(datain, varneed){
   dataneed <- datain%>%
-    mutate(groupind = "allpatients")%>%
-    group_by(groupind)%>%
+    group_by(sepsis)%>%
     summarise(varname = varneed,
               mean = mean(!!sym(varneed), na.rm = T),
               min = min(!!sym(varneed), na.rm = T),
@@ -128,12 +136,17 @@ for (varneed in list_vital){
 
 ### Winsorize dataset at 99.9th percentile
 fn_winsorize <- function(datain,varneed){
-  upperbound <- as.numeric(data_stats[data_stats$varname == varneed, "q999"])
-  lowerbound <- as.numeric(data_stats[data_stats$varname == varneed, "q01"])
+
+  value_bound <- data_stats%>%
+    filter(varname == varneed)%>%mutate(lowerbound = q001, upperbound = q999)%>%
+    select(sepsis, lowerbound, upperbound)
+
   dataout <- datain%>%
+    left_join(value_bound)%>%
     mutate(newvar = !!sym(varneed),
            newvar = ifelse(newvar > upperbound, upperbound, newvar),
-           newvar = ifelse(newvar < lowerbound, lowerbound, newvar))
+           newvar = ifelse(newvar < lowerbound, lowerbound, newvar))%>%
+    select(-lowerbound, -upperbound)
   
   names(dataout) <- gsub("newvar", paste0(varneed, "_r"), names(dataout))
   return(dataout)
@@ -221,7 +234,7 @@ df_analytical_ready <- cbind(df_master_with_time,
                              o2sat_embeddings, sbp_embeddings, dbp_embeddings)
                              
 
-write.csv(df_analytical_ready, file.path(p_data, "analytical_ready_1115.csv"), row.names = F)
+write.csv(df_analytical_ready, file.path(p_data, "analytical_ready.csv"), row.names = F)
 
 
 
