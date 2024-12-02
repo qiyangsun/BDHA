@@ -3,21 +3,21 @@ Final project repo for CSE6250
 
 # Package Dependencies
 R 4.3.2 <br>
-	- caret 6.0-94	
- 	- data.table 1.16.0
-  	- dplyr 1.1.4
-   	- MatchIt 4.5.5
-    	- pROC 1.18.5
-     	- purrr 1.0.2
-      	- randomForest 4.7-1.2
+	- caret 6.0-94	<br>
+ 	- data.table 1.16.0<br>
+  	- dplyr 1.1.4<br>
+   	- MatchIt 4.5.5<br>
+    	- pROC 1.18.5<br>
+     	- purrr 1.0.2<br>
+      	- randomForest 4.7-1.2<br>
 
 Python
 python 3.1.2 <br>
-	- pandas 
-	- sklearn
-	- torch
-	- numpy
-	- itertools
+	- pandas <br>
+	- sklearn<br>
+	- torch<br>
+	- numpy<br>
+	- itertools<br>
 
 
 # Data Processing
