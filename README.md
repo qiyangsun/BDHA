@@ -31,3 +31,6 @@ python 3.1.2 <br>
 
 -	Proposed Model <br>
 		Notebook cse6250_final_project.ipynb <br>
+# Instruction to Run
+- 	download the R script and run directly <br>
+- 	For python notebook, open them with colab and run directly <br>
