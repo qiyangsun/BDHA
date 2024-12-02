@@ -24,10 +24,10 @@ python 3.1.2
 -	Create analytical ready dataset <br>
 		Rscript data_processing.r <br>
 - 	create padded tensor sequence
-- 		Notebook data_process_for_deep_learning.ipynb
+- 		Notebook data_process_for_deep_learning.ipynb <br>
 # Model
 -	Benchmark Model <br>
 		Rscript model_benchmark.r <br>
 
 -	Proposed Model
-		Notebook cse6250_final_project.ipynb
+		Notebook cse6250_final_project.ipynb <br>
