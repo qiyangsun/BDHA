@@ -12,7 +12,7 @@ R 4.3.2 <br>
       	- randomForest 4.7-1.2
 
 Python
-python 3.1.2
+python 3.1.2 <br>
 	- pandas 
 	- sklearn
 	- torch
@@ -23,7 +23,7 @@ python 3.1.2
 # Data Processing
 -	Create analytical ready dataset <br>
 		Rscript data_processing.r <br>
-- 	create padded tensor sequence <br>
+- 	Create padded tensor sequence <br>
 - 		Notebook data_process_for_deep_learning.ipynb <br>
 # Model
 -	Benchmark Model <br>
